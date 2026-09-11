@@ -1,0 +1,13 @@
+# Simulation waveform
+*.vcd
+*.wdb
+
+# Vivado
+vivado/
+.Xil/
+*.jou
+*.log
+*.pb
+
+# Verilator
+obj_dir/
