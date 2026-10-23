@@ -1,0 +1,2 @@
+`define TEST_NUM_RESULTS 89
+`define TEST_NUM_TRAPS 8

@@ -1,0 +1,271 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1760" height="1390" viewBox="0 0 1760 1390">
+<title>RV32I 处理器：当前框架与后续完善方向</title>
+<desc>绿色为已完成并验证的模块，琥珀色为已实现但语义不完整的模块，橙色、蓝色、灰色为后续阶段。</desc>
+<defs>
+<filter id="shadow" x="-8%" y="-8%" width="116%" height="120%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#1F2937" flood-opacity="0.10"/></filter>
+<marker id="arr-g" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2E7D32"/></marker>
+<marker id="arr-o" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#E65100"/></marker>
+<marker id="arr-b" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1565C0"/></marker>
+<marker id="arr-y" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#607D8B"/></marker>
+<marker id="arr-f" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8A96A3"/></marker>
+<marker id="arr-r" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#C62828"/></marker>
+</defs>
+<rect width="1760" height="1390" fill="#FFFFFF"/>
+<text x="40.0" y="56.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="30" font-weight="700" fill="#1F2937">RV32I 处理器：当前框架与后续完善方向</text>
+<text x="40.0" y="90.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="14.5" font-weight="400" fill="#5B6770">当前基线：单周期 RV32I 整数核心（IF / ID / EX / MEM / WB）· QuestaSim tb_top 6/6 PASS · 37 / 47 条指令具备完整数据通路</text>
+<text x="40.0" y="113.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="11.5" font-weight="400" fill="#8A96A3">代码位置：RISC-V32/rtl/core/{if,id,ex,mem}_stage + top.v ｜ 13 个 RTL 文件 ｜ 2,667 行（含宏定义与注释）</text>
+<rect x="1080" y="124" width="120.02000000000001" height="32" rx="16" ry="16" fill="#FFFFFF" stroke="#2E7D32" stroke-width="1.2"/>
+<circle cx="1095" cy="140" r="4.5" fill="#2E7D32"/>
+<text x="1106.0" y="144.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="11.5" font-weight="600" fill="#1B5E20">13 个 RTL 文件</text>
+<rect x="1210.02" y="124" width="118.64" height="32" rx="16" ry="16" fill="#FFFFFF" stroke="#2E7D32" stroke-width="1.2"/>
+<circle cx="1225.02" cy="140" r="4.5" fill="#2E7D32"/>
+<text x="1236.0" y="144.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="11.5" font-weight="600" fill="#1B5E20">37/47 指令完整</text>
+<rect x="1338.6599999999999" y="124" width="130.60000000000002" height="32" rx="16" ry="16" fill="#FFFFFF" stroke="#2E7D32" stroke-width="1.2"/>
+<circle cx="1353.6599999999999" cy="140" r="4.5" fill="#2E7D32"/>
+<text x="1364.7" y="144.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="11.5" font-weight="600" fill="#1B5E20">tb_top 6/6 PASS</text>
+<rect x="40" y="132" width="18" height="18" rx="4" ry="4" fill="#2E7D32" stroke="none" stroke-width="0"/>
+<text x="66.0" y="146.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12" font-weight="600" fill="#5B6770">已完成并验证</text>
+<rect x="164.0" y="132" width="18" height="18" rx="4" ry="4" fill="#F2A900" stroke="none" stroke-width="0"/>
+<text x="190.0" y="146.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12" font-weight="600" fill="#5B6770">已实现 · 语义不完整</text>
+<rect x="332.15999999999997" y="132" width="18" height="18" rx="4" ry="4" fill="#E65100" stroke="none" stroke-width="0"/>
+<text x="358.2" y="146.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12" font-weight="600" fill="#5B6770">阶段二 · P0 下一步</text>
+<rect x="496.47999999999996" y="132" width="18" height="18" rx="4" ry="4" fill="#1565C0" stroke="none" stroke-width="0"/>
+<text x="522.5" y="146.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12" font-weight="600" fill="#5B6770">阶段三/四 · P1</text>
+<rect x="636.8" y="132" width="18" height="18" rx="4" ry="4" fill="#607D8B" stroke="none" stroke-width="0"/>
+<text x="662.8" y="146.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12" font-weight="600" fill="#5B6770">阶段七/八 · SoC / 上板</text>
+<rect x="40" y="200" width="270" height="400" rx="14" ry="14" fill="#F4FAF5" stroke="#2E7D32" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="40" y="200" width="270" height="40" rx="14" ry="14" fill="#1B5E20" stroke="none" stroke-width="0"/>
+<rect x="40" y="222" width="270" height="18" rx="0" ry="0" fill="#1B5E20" stroke="none" stroke-width="0"/>
+<text x="56.0" y="227.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF">IF 取指</text>
+<text x="296.0" y="226.0" font-family="'Cascadia Mono','Consolas','Courier New',monospace" font-size="9.5" font-weight="400" fill="#FFFFFF" text-anchor="end" opacity="0.75">if_stage</text>
+<rect x="380" y="200" width="380" height="400" rx="14" ry="14" fill="#F4FAF5" stroke="#2E7D32" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="380" y="200" width="380" height="40" rx="14" ry="14" fill="#1B5E20" stroke="none" stroke-width="0"/>
+<rect x="380" y="222" width="380" height="18" rx="0" ry="0" fill="#1B5E20" stroke="none" stroke-width="0"/>
+<text x="396.0" y="227.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF">ID 译码</text>
+<text x="746.0" y="226.0" font-family="'Cascadia Mono','Consolas','Courier New',monospace" font-size="9.5" font-weight="400" fill="#FFFFFF" text-anchor="end" opacity="0.75">id_stage</text>
+<rect x="830" y="200" width="320" height="400" rx="14" ry="14" fill="#F4FAF5" stroke="#2E7D32" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="830" y="200" width="320" height="40" rx="14" ry="14" fill="#1B5E20" stroke="none" stroke-width="0"/>
+<rect x="830" y="222" width="320" height="18" rx="0" ry="0" fill="#1B5E20" stroke="none" stroke-width="0"/>
+<text x="846.0" y="227.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF">EX 执行</text>
+<text x="1136.0" y="226.0" font-family="'Cascadia Mono','Consolas','Courier New',monospace" font-size="9.5" font-weight="400" fill="#FFFFFF" text-anchor="end" opacity="0.75">ex_stage</text>
+<rect x="1220" y="200" width="230" height="400" rx="14" ry="14" fill="#F4FAF5" stroke="#2E7D32" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="1220" y="200" width="230" height="40" rx="14" ry="14" fill="#1B5E20" stroke="none" stroke-width="0"/>
+<rect x="1220" y="222" width="230" height="18" rx="0" ry="0" fill="#1B5E20" stroke="none" stroke-width="0"/>
+<text x="1236.0" y="227.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF">MEM 访存</text>
+<text x="1436.0" y="226.0" font-family="'Cascadia Mono','Consolas','Courier New',monospace" font-size="9.5" font-weight="400" fill="#FFFFFF" text-anchor="end" opacity="0.75">mem_stage</text>
+<rect x="1520" y="200" width="200" height="400" rx="14" ry="14" fill="#F4FAF5" stroke="#2E7D32" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="1520" y="200" width="200" height="40" rx="14" ry="14" fill="#1B5E20" stroke="none" stroke-width="0"/>
+<rect x="1520" y="222" width="200" height="18" rx="0" ry="0" fill="#1B5E20" stroke="none" stroke-width="0"/>
+<text x="1536.0" y="227.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF">WB 写回</text>
+<text x="1706.0" y="226.0" font-family="'Cascadia Mono','Consolas','Courier New',monospace" font-size="9.5" font-weight="400" fill="#FFFFFF" text-anchor="end" opacity="0.75">top.v</text>
+<rect x="55" y="252" width="240" height="56" rx="8" ry="8" fill="#FFFFFF" stroke="#2E7D32" stroke-width="1.4"/>
+<text x="67.0" y="272.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="13.2" font-weight="700" fill="#1B5E20">pc_reg</text>
+<text x="67.0" y="288.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="10.4" font-weight="400" fill="#5B6770">PC 寄存器 · 异步复位</text>
+<text x="67.0" y="301.0" font-family="'Cascadia Mono','Consolas','Courier New',monospace" font-size="8.8" font-weight="400" fill="#6B7280">pc_reg.v</text>
+<rect x="55" y="320" width="240" height="56" rx="8" ry="8" fill="#FFFFFF" stroke="#2E7D32" stroke-width="1.4"/>
+<text x="67.0" y="340.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="13.2" font-weight="700" fill="#1B5E20">pc_plus4</text>
+<text x="67.0" y="356.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="10.4" font-weight="400" fill="#5B6770">PC + 4</text>
+<text x="67.0" y="369.0" font-family="'Cascadia Mono','Consolas','Courier New',monospace" font-size="8.8" font-weight="400" fill="#6B7280">pc_plus4.v</text>
+<rect x="55" y="388" width="240" height="56" rx="8" ry="8" fill="#FFFFFF" stroke="#2E7D32" stroke-width="1.4"/>
+<text x="67.0" y="408.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="13.2" font-weight="700" fill="#1B5E20">mux</text>
+<text x="67.0" y="424.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="10.4" font-weight="400" fill="#5B6770">下一 PC 四选一</text>
+<text x="67.0" y="437.0" font-family="'Cascadia Mono','Consolas','Courier New',monospace" font-size="8.8" font-weight="400" fill="#6B7280">mux.v</text>
+<rect x="55" y="456" width="240" height="66" rx="8" ry="8" fill="#F7FBF8" stroke="#2E7D32" stroke-width="1.4" stroke-dasharray="5 4"/>
+<text x="67.0" y="476.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="13.2" font-weight="700" fill="#1B5E20">外部指令存储器</text>
+<text x="67.0" y="492.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="10.4" font-weight="400" fill="#5B6770">imem_addr / imem_rdata</text>
+<text x="67.0" y="505.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="10.4" font-weight="400" fill="#5B6770">组合读（TB / BRAM 接口）</text>
+<text x="55.0" y="548.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="10.5" font-weight="400" fill="#5B6770">PC 源：PC+4 · JAL · JALR · 分支目标</text>
+<text x="55.0" y="566.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="10.5" font-weight="400" fill="#5B6770">分支 taken 时优先于 pc_src</text>
+<rect x="396" y="252" width="348" height="56" rx="8" ry="8" fill="#FFFFFF" stroke="#2E7D32" stroke-width="1.4"/>
+<text x="408.0" y="272.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="13.2" font-weight="700" fill="#1B5E20">decode</text>
+<text x="408.0" y="288.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="10.4" font-weight="400" fill="#5B6770">指令译码 · 非法指令检测 · rs1/rs2_used</text>
+<text x="408.0" y="301.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="8.8" font-weight="400" fill="#6B7280">deocde.v（文件名待更正）</text>
+<rect x="396" y="320" width="348" height="56" rx="8" ry="8" fill="#FFFFFF" stroke="#2E7D32" stroke-width="1.4"/>
+<text x="408.0" y="340.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="13.2" font-weight="700" fill="#1B5E20">control_unit</text>
+<text x="408.0" y="356.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="10.4" font-weight="400" fill="#5B6770">WB / ALU / 访存 / 分支 / PC 控制</text>
+<text x="408.0" y="369.0" font-family="'Cascadia Mono','Consolas','Courier New',monospace" font-size="8.8" font-weight="400" fill="#6B7280">control_unit.v</text>
+<rect x="396" y="388" width="348" height="56" rx="8" ry="8" fill="#FFFFFF" stroke="#2E7D32" stroke-width="1.4"/>
+<text x="408.0" y="408.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="13.2" font-weight="700" fill="#1B5E20">imm_gen</text>
+<text x="408.0" y="424.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="10.4" font-weight="400" fill="#5B6770">I / S / B / U / J / CSR 立即数</text>
+<text x="408.0" y="437.0" font-family="'Cascadia Mono','Consolas','Courier New',monospace" font-size="8.8" font-weight="400" fill="#6B7280">imm_gen.v</text>
+<rect x="396" y="456" width="348" height="56" rx="8" ry="8" fill="#FFFFFF" stroke="#2E7D32" stroke-width="1.4"/>
+<text x="408.0" y="476.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="13.2" font-weight="700" fill="#1B5E20">regfile</text>
+<text x="408.0" y="492.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="10.4" font-weight="400" fill="#5B6770">32×32 · x0 恒 0 · 写优先同拍旁路</text>
+<text x="408.0" y="505.0" font-family="'Cascadia Mono','Consolas','Courier New',monospace" font-size="8.8" font-weight="400" fill="#6B7280">regfile.v</text>
+<rect x="396" y="524" width="348" height="56" rx="8" ry="8" fill="#FFF9E6" stroke="#F2A900" stroke-width="1.4"/>
+<text x="408.0" y="544.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.8" font-weight="700" fill="#8A5A00">instr_decoder（旧版）</text>
+<text x="408.0" y="560.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="10.2" font-weight="400" fill="#7A5A16">已实现但未接入数据通路（重复译码器）</text>
+<text x="408.0" y="573.0" font-family="'Cascadia Mono','Consolas','Courier New',monospace" font-size="8.8" font-weight="400" fill="#8A6D2F">instr_decoder.v</text>
+<rect x="846" y="252" width="288" height="56" rx="8" ry="8" fill="#FFFFFF" stroke="#2E7D32" stroke-width="1.4"/>
+<text x="858.0" y="272.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="13.2" font-weight="700" fill="#1B5E20">mux_2_alu × 2</text>
+<text x="858.0" y="288.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="10.4" font-weight="400" fill="#5B6770">ALU 操作数选择（rs1/PC、rs2/imm）</text>
+<text x="858.0" y="301.0" font-family="'Cascadia Mono','Consolas','Courier New',monospace" font-size="8.8" font-weight="400" fill="#6B7280">mux_2_alu.v</text>
+<rect x="846" y="320" width="288" height="56" rx="8" ry="8" fill="#FFFFFF" stroke="#2E7D32" stroke-width="1.4"/>
+<text x="858.0" y="340.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="13.2" font-weight="700" fill="#1B5E20">alu</text>
+<text x="858.0" y="356.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="9.6" font-weight="400" fill="#5B6770">ADD SUB SLL SLT SLTU XOR SRL SRA</text>
+<text x="858.0" y="369.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="9.6" font-weight="400" fill="#5B6770">OR AND（10 种运算）</text>
+<text x="858.0" y="369.0" font-family="'Cascadia Mono','Consolas','Courier New',monospace" font-size="8.8" font-weight="400" fill="#6B7280">alu.v</text>
+<rect x="846" y="388" width="288" height="56" rx="8" ry="8" fill="#FFFFFF" stroke="#2E7D32" stroke-width="1.4"/>
+<text x="858.0" y="408.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="13.2" font-weight="700" fill="#1B5E20">branch_unit</text>
+<text x="858.0" y="424.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="10.4" font-weight="400" fill="#5B6770">BEQ BNE BLT BGE BLTU BGEU + 目标地址</text>
+<text x="858.0" y="437.0" font-family="'Cascadia Mono','Consolas','Courier New',monospace" font-size="8.8" font-weight="400" fill="#6B7280">branch_unit.v</text>
+<rect x="846" y="456" width="288" height="54" rx="8" ry="8" fill="#F7FBF8" stroke="#2E7D32" stroke-width="1.4"/>
+<text x="858.0" y="476.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="13.2" font-weight="700" fill="#1B5E20">跳转目标回送 IF</text>
+<text x="858.0" y="492.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="10.2" font-weight="400" fill="#5B6770">branch_taken / branch_target</text>
+<rect x="846" y="520" width="288" height="62" rx="8" ry="8" fill="#EDF4FD" stroke="#1565C0" stroke-width="1.4" stroke-dasharray="6 4"/>
+<text x="858.0" y="540.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.8" font-weight="700" fill="#0D47A1">MulDiv（阶段四）</text>
+<text x="858.0" y="556.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="10.2" font-weight="400" fill="#3A5F8A">MUL / DIV / REM · 尚未实现</text>
+<rect x="1236" y="252" width="198" height="56" rx="8" ry="8" fill="#FFFFFF" stroke="#2E7D32" stroke-width="1.4"/>
+<text x="1248.0" y="272.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="13.2" font-weight="700" fill="#1B5E20">lsu</text>
+<text x="1248.0" y="288.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="10.4" font-weight="400" fill="#5B6770">地址 / 写数据 / 字节掩码</text>
+<text x="1248.0" y="301.0" font-family="'Cascadia Mono','Consolas','Courier New',monospace" font-size="8.8" font-weight="400" fill="#6B7280">lsu.v</text>
+<rect x="1236" y="320" width="198" height="56" rx="8" ry="8" fill="#FFFFFF" stroke="#2E7D32" stroke-width="1.4"/>
+<text x="1248.0" y="340.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="13.2" font-weight="700" fill="#1B5E20">Load 通路</text>
+<text x="1248.0" y="356.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="10.0" font-weight="400" fill="#5B6770">LB LH LW LBU LHU</text>
+<text x="1248.0" y="369.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="10.0" font-weight="400" fill="#5B6770">符号 / 零扩展</text>
+<rect x="1236" y="388" width="198" height="56" rx="8" ry="8" fill="#FFFFFF" stroke="#2E7D32" stroke-width="1.4"/>
+<text x="1248.0" y="408.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="13.2" font-weight="700" fill="#1B5E20">Store 通路</text>
+<text x="1248.0" y="424.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="10.0" font-weight="400" fill="#5B6770">SB SH SW</text>
+<text x="1248.0" y="437.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="10.0" font-weight="400" fill="#5B6770">mem_wmask 字节使能</text>
+<rect x="1236" y="456" width="198" height="54" rx="8" ry="8" fill="#FFF9E6" stroke="#F2A900" stroke-width="1.4"/>
+<text x="1248.0" y="476.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.4" font-weight="700" fill="#8A5A00">非对齐访问</text>
+<text x="1248.0" y="492.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="10.0" font-weight="400" fill="#7A5A16">屏蔽为 0，未产生异常</text>
+<rect x="1236" y="520" width="198" height="62" rx="8" ry="8" fill="#F7FBF8" stroke="#2E7D32" stroke-width="1.4" stroke-dasharray="5 4"/>
+<text x="1248.0" y="540.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.4" font-weight="700" fill="#1B5E20">外部数据存储器</text>
+<text x="1248.0" y="556.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="9.8" font-weight="400" fill="#5B6770">mem_* / mem_rdata</text>
+<text x="1248.0" y="569.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="9.8" font-weight="400" fill="#5B6770">组合读 · 无握手</text>
+<rect x="1536" y="252" width="168" height="56" rx="8" ry="8" fill="#FFFFFF" stroke="#2E7D32" stroke-width="1.4"/>
+<text x="1548.0" y="272.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.6" font-weight="700" fill="#1B5E20">写回选择 mux</text>
+<text x="1548.0" y="288.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="9.8" font-weight="400" fill="#5B6770">reg_wsrc 四选一</text>
+<text x="1548.0" y="301.0" font-family="'Cascadia Mono','Consolas','Courier New',monospace" font-size="8.8" font-weight="400" fill="#6B7280">top.v</text>
+<rect x="1536" y="320" width="168" height="90" rx="8" ry="8" fill="#FFFFFF" stroke="#2E7D32" stroke-width="1.4"/>
+<text x="1548.0" y="340.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.4" font-weight="700" fill="#1B5E20">写回源编码</text>
+<text x="1548.0" y="356.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="9.8" font-weight="400" fill="#5B6770">ALU / MEM / PC+4 / IMM</text>
+<text x="1548.0" y="369.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="9.8" font-weight="400" fill="#5B6770">JAL·JALR→PC+4</text>
+<text x="1548.0" y="382.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="9.8" font-weight="400" fill="#5B6770">LUI→IMM</text>
+<rect x="1536" y="422" width="168" height="66" rx="8" ry="8" fill="#FFF9E6" stroke="#F2A900" stroke-width="1.4"/>
+<text x="1548.0" y="442.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.0" font-weight="700" fill="#8A5A00">WB_CSR 未接入</text>
+<text x="1548.0" y="458.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="9.8" font-weight="400" fill="#7A5A16">CSR 指令仅译码</text>
+<text x="1548.0" y="471.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="9.8" font-weight="400" fill="#7A5A16">无 CSR 写回</text>
+<text x="1536.0" y="522.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="10.5" font-weight="400" fill="#5B6770">写回目的：</text>
+<text x="1536.0" y="540.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="10.5" font-weight="400" fill="#5B6770">regfile.wdata</text>
+<text x="1536.0" y="558.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="10.5" font-weight="400" fill="#5B6770">（x0 写入丢弃）</text>
+<polyline points="310,400 380,400" fill="none" stroke="#2E7D32" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arr-g)"/>
+<polyline points="760,400 830,400" fill="none" stroke="#2E7D32" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arr-g)"/>
+<polyline points="1150,400 1220,400" fill="none" stroke="#2E7D32" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arr-g)"/>
+<polyline points="1450,400 1520,400" fill="none" stroke="#2E7D32" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arr-g)"/>
+<polyline points="990,200 990,180 175,180 175,200" fill="none" stroke="#2E7D32" stroke-width="2.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arr-g)"/>
+<rect x="447.344" y="170" width="305.312" height="20" rx="5" ry="5" fill="#FFFFFF" stroke="none" stroke-width="0"/>
+<text x="600.0" y="183.8" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="10.2" font-weight="400" fill="#1B5E20" text-anchor="middle">branch_taken / branch_target / jal_target → next_pc</text>
+<polyline points="1620,600 1620,652 356,652 356,484 380,484" fill="none" stroke="#2E7D32" stroke-width="2.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arr-g)"/>
+<rect x="854.068" y="642" width="251.86399999999998" height="20" rx="5" ry="5" fill="#FFFFFF" stroke="none" stroke-width="0"/>
+<text x="980.0" y="655.8" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="10.2" font-weight="400" fill="#1B5E20" text-anchor="middle">写回 wdata / wen → regfile（同拍写优先旁路）</text>
+<text x="880.0" y="626.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="10.4" font-weight="400" fill="#8A96A3" text-anchor="middle">级间信号：指令字 ｜ rs1/rs2/imm/控制 ｜ alu_result ｜ load_data ｜ 写回 wdata</text>
+<text x="40.0" y="710.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="18" font-weight="700" fill="#1F2937">后续完善方向：按阶段推进（颜色对应优先级与阶段）</text>
+<line x1="40" y1="722" x2="1720" y2="722" stroke="#D8DEE5" stroke-width="1.2"/>
+<rect x="40" y="738" width="540" height="280" rx="12" ry="12" fill="#FFF3E8" stroke="#E65100" stroke-width="2.0" filter="url(#shadow)"/>
+<rect x="40" y="738" width="540" height="44" rx="12" ry="12" fill="#E65100" stroke="none" stroke-width="0"/>
+<rect x="40" y="762" width="540" height="20" rx="0" ry="0" fill="#E65100" stroke="none" stroke-width="0"/>
+<text x="58.0" y="767.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF">阶段二 · P0 · 下一步</text>
+<rect x="512.5" y="748" width="51.5" height="24" rx="12" ry="12" fill="#FFFFFF" stroke="none" stroke-width="0" opacity="0.22"/>
+<text x="538.2" y="765.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="middle">最优先</text>
+<text x="60.0" y="814.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="17" font-weight="700" fill="#B23C00">流水线改造与冒险处理</text>
+<circle cx="65" cy="840" r="3" fill="#E65100"/>
+<text x="78.0" y="844.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.6" font-weight="400" fill="#333B45">插入 IF/ID、ID/EX、EX/MEM、MEM/WB 级间寄存器（支持 stall / flush）</text>
+<circle cx="65" cy="865" r="3" fill="#E65100"/>
+<text x="78.0" y="869.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.6" font-weight="400" fill="#333B45">IF 拆 IF1/IF2 适配 BRAM 同步读；跳转时 flush 3 级</text>
+<circle cx="65" cy="890" r="3" fill="#E65100"/>
+<text x="78.0" y="894.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.6" font-weight="400" fill="#333B45">forward_unit 两级前递与优先级；hazard_unit 处理 load-use</text>
+<circle cx="65" cy="915" r="3" fill="#E65100"/>
+<text x="78.0" y="919.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.6" font-weight="400" fill="#333B45">严格保证 stall 与 flush 互斥，避免重复执行或丢指令</text>
+<line x1="60" y1="972" x2="560" y2="972" stroke="#E65100" stroke-width="1.0" opacity="0.3"/>
+<text x="60.0" y="996.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="11.6" font-weight="600" fill="#B23C00">验收：rv32ui-p-* 100% · 5 个定向冒险用例 · 记录 CPI</text>
+<rect x="610" y="738" width="540" height="280" rx="12" ry="12" fill="#EDF4FD" stroke="#1565C0" stroke-width="2.0" filter="url(#shadow)"/>
+<rect x="610" y="738" width="540" height="44" rx="12" ry="12" fill="#1565C0" stroke="none" stroke-width="0"/>
+<rect x="610" y="762" width="540" height="20" rx="0" ry="0" fill="#1565C0" stroke="none" stroke-width="0"/>
+<text x="628.0" y="767.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF">阶段三 · P1</text>
+<rect x="1102.24" y="748" width="31.76" height="24" rx="12" ry="12" fill="#FFFFFF" stroke="none" stroke-width="0" opacity="0.22"/>
+<text x="1118.1" y="765.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="middle">P1</text>
+<text x="630.0" y="814.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="17" font-weight="700" fill="#0D47A1">CSR、异常与中断</text>
+<circle cx="635" cy="840" r="3" fill="#1565C0"/>
+<text x="648.0" y="844.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.6" font-weight="400" fill="#333B45">csr_file：12 个 Machine 模式 CSR，只读地址写保护</text>
+<circle cx="635" cy="865" r="3" fill="#1565C0"/>
+<text x="648.0" y="869.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.6" font-weight="400" fill="#333B45">6 条 CSR 指令接入数据通路；CSRRS x0 只读不写</text>
+<circle cx="635" cy="890" r="3" fill="#1565C0"/>
+<text x="648.0" y="894.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.6" font-weight="400" fill="#333B45">trap_unit：mepc / mcause / mtval / mstatus → mtvec</text>
+<circle cx="635" cy="915" r="3" fill="#1565C0"/>
+<text x="648.0" y="919.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.6" font-weight="400" fill="#333B45">mret 返回；ECALL / EBREAK 由 NOP 变为真实陷入</text>
+<line x1="630" y1="972" x2="1130" y2="972" stroke="#1565C0" stroke-width="1.0" opacity="0.3"/>
+<text x="630.0" y="996.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="11.6" font-weight="600" fill="#0D47A1">验收：rv32mi-p-* ≥ 90% · 异常处理回环程序通过</text>
+<rect x="1180" y="738" width="540" height="280" rx="12" ry="12" fill="#EDF4FD" stroke="#1565C0" stroke-width="2.0" filter="url(#shadow)"/>
+<rect x="1180" y="738" width="540" height="44" rx="12" ry="12" fill="#1565C0" stroke="none" stroke-width="0"/>
+<rect x="1180" y="762" width="540" height="20" rx="0" ry="0" fill="#1565C0" stroke="none" stroke-width="0"/>
+<text x="1198.0" y="767.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF">阶段四 · P1</text>
+<rect x="1672.24" y="748" width="31.76" height="24" rx="12" ry="12" fill="#FFFFFF" stroke="none" stroke-width="0" opacity="0.22"/>
+<text x="1688.1" y="765.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="middle">P1</text>
+<text x="1200.0" y="814.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="17" font-weight="700" fill="#0D47A1">M 扩展乘除法</text>
+<circle cx="1205" cy="840" r="3" fill="#1565C0"/>
+<text x="1218.0" y="844.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.6" font-weight="400" fill="#333B45">muldiv 状态机 IDLE / BUSY / DONE，busy 时流水线 stall</text>
+<circle cx="1205" cy="865" r="3" fill="#1565C0"/>
+<text x="1218.0" y="869.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.6" font-weight="400" fill="#333B45">MUL / MULH / MULHSU / MULHU 映射 DSP48E1</text>
+<circle cx="1205" cy="890" r="3" fill="#1565C0"/>
+<text x="1218.0" y="894.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.6" font-weight="400" fill="#333B45">DIV / DIVU / REM / REMU 32 拍恢复余数法</text>
+<circle cx="1205" cy="915" r="3" fill="#1565C0"/>
+<text x="1218.0" y="919.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.6" font-weight="400" fill="#333B45">特例：除零、-2^31 / -1 不产生异常</text>
+<line x1="1200" y1="972" x2="1700" y2="972" stroke="#1565C0" stroke-width="1.0" opacity="0.3"/>
+<text x="1200.0" y="996.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="11.6" font-weight="600" fill="#0D47A1">验收：rv32um-p-* 100% · 记录 DSP 数与迭代周期</text>
+<rect x="40" y="1040" width="540" height="280" rx="12" ry="12" fill="#F2F5F7" stroke="#607D8B" stroke-width="2.0" filter="url(#shadow)"/>
+<rect x="40" y="1040" width="540" height="44" rx="12" ry="12" fill="#607D8B" stroke="none" stroke-width="0"/>
+<rect x="40" y="1064" width="540" height="20" rx="0" ry="0" fill="#607D8B" stroke="none" stroke-width="0"/>
+<text x="58.0" y="1069.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF">阶段五/六 · P1</text>
+<rect x="532.24" y="1050" width="31.76" height="24" rx="12" ry="12" fill="#FFFFFF" stroke="none" stroke-width="0" opacity="0.22"/>
+<text x="548.1" y="1067.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="middle">P1</text>
+<text x="60.0" y="1116.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="17" font-weight="700" fill="#37474F">验证闭环：UVM + 差分</text>
+<circle cx="65" cy="1142" r="3" fill="#607D8B"/>
+<text x="78.0" y="1146.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.6" font-weight="400" fill="#333B45">UVM：env / agent / driver / monitor / scoreboard / sequencer</text>
+<circle cx="65" cy="1167" r="3" fill="#607D8B"/>
+<text x="78.0" y="1171.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.6" font-weight="400" fill="#333B45">约束随机提高冒险命中；功能 + 代码覆盖率 ≥ 95%</text>
+<circle cx="65" cy="1192" r="3" fill="#607D8B"/>
+<text x="78.0" y="1196.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.6" font-weight="400" fill="#333B45">Spike lockstep 差分（commit log / DPI-C）</text>
+<circle cx="65" cy="1217" r="3" fill="#607D8B"/>
+<text x="78.0" y="1221.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.6" font-weight="400" fill="#333B45">riscv-tests 全量回归并接入 CI</text>
+<line x1="60" y1="1274" x2="560" y2="1274" stroke="#607D8B" stroke-width="1.0" opacity="0.3"/>
+<text x="60.0" y="1298.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="11.6" font-weight="600" fill="#37474F">验收：≥ 100 万条随机指令无失败 · 覆盖率报告</text>
+<rect x="610" y="1040" width="540" height="280" rx="12" ry="12" fill="#F2F5F7" stroke="#607D8B" stroke-width="2.0" filter="url(#shadow)"/>
+<rect x="610" y="1040" width="540" height="44" rx="12" ry="12" fill="#607D8B" stroke="none" stroke-width="0"/>
+<rect x="610" y="1064" width="540" height="20" rx="0" ry="0" fill="#607D8B" stroke="none" stroke-width="0"/>
+<text x="628.0" y="1069.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF">阶段七 · P0</text>
+<rect x="1072.0" y="1050" width="62.0" height="24" rx="12" ry="12" fill="#FFFFFF" stroke="none" stroke-width="0" opacity="0.22"/>
+<text x="1103.0" y="1067.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="middle">上板前提</text>
+<text x="630.0" y="1116.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="17" font-weight="700" fill="#37474F">SoC 集成</text>
+<circle cx="635" cy="1142" r="3" fill="#607D8B"/>
+<text x="648.0" y="1146.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.6" font-weight="400" fill="#333B45">地址译码：IBus / DBus / 外设空间，指令与数据各 32KB BRAM</text>
+<circle cx="635" cy="1167" r="3" fill="#607D8B"/>
+<text x="648.0" y="1171.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.6" font-weight="400" fill="#333B45">BRAM 字节写使能对接 mem_wmask，读延迟 1 拍</text>
+<circle cx="635" cy="1192" r="3" fill="#607D8B"/>
+<text x="648.0" y="1196.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.6" font-weight="400" fill="#333B45">UART TX/RX（50MHz / 115200 ≈ 434）、Timer、GPIO</text>
+<circle cx="635" cy="1217" r="3" fill="#607D8B"/>
+<text x="648.0" y="1221.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.6" font-weight="400" fill="#333B45">异步输入两级同步；定时器中断接入 mie / PLIC</text>
+<line x1="630" y1="1274" x2="1130" y2="1274" stroke="#607D8B" stroke-width="1.0" opacity="0.3"/>
+<text x="630.0" y="1298.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="11.6" font-weight="600" fill="#37474F">验收：SoC 仿真串口打印 Hello World</text>
+<rect x="1180" y="1040" width="540" height="280" rx="12" ry="12" fill="#F2F5F7" stroke="#607D8B" stroke-width="2.0" filter="url(#shadow)"/>
+<rect x="1180" y="1040" width="540" height="44" rx="12" ry="12" fill="#607D8B" stroke="none" stroke-width="0"/>
+<rect x="1180" y="1064" width="540" height="20" rx="0" ry="0" fill="#607D8B" stroke="none" stroke-width="0"/>
+<text x="1198.0" y="1069.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF">阶段八/九 · P0</text>
+<rect x="1663.0" y="1050" width="41.0" height="24" rx="12" ry="12" fill="#FFFFFF" stroke="none" stroke-width="0" opacity="0.22"/>
+<text x="1683.5" y="1067.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="middle">收尾</text>
+<text x="1200.0" y="1116.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="17" font-weight="700" fill="#37474F">FPGA 上板与项目收尾</text>
+<circle cx="1205" cy="1142" r="3" fill="#607D8B"/>
+<text x="1218.0" y="1146.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.6" font-weight="400" fill="#333B45">XDC 约束、综合 / 实现、时序收敛</text>
+<circle cx="1205" cy="1167" r="3" fill="#607D8B"/>
+<text x="1218.0" y="1171.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.6" font-weight="400" fill="#333B45">上板跑裸机程序：串口输出 + LED / 按键</text>
+<circle cx="1205" cy="1192" r="3" fill="#607D8B"/>
+<text x="1218.0" y="1196.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.6" font-weight="400" fill="#333B45">记录 LUT / FF / BRAM / DSP 与 Fmax</text>
+<circle cx="1205" cy="1217" r="3" fill="#607D8B"/>
+<text x="1218.0" y="1221.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="12.6" font-weight="400" fill="#333B45">沉淀 ADR、周记、简历量化指标</text>
+<line x1="1200" y1="1274" x2="1700" y2="1274" stroke="#607D8B" stroke-width="1.0" opacity="0.3"/>
+<text x="1200.0" y="1298.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="11.6" font-weight="600" fill="#37474F">验收：上板稳定运行 · 资源与时序数据归档</text>
+<line x1="40" y1="1348" x2="1720" y2="1348" stroke="#E1E6EB" stroke-width="1.0"/>
+<text x="40.0" y="1372.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="10.5" font-weight="400" fill="#8A96A3">生成日期：2026-10-20 ｜ 依据：RISC-V32/rtl、model_tb/tb_top.v、model_tb/transcript</text>
+<text x="1720.0" y="1372.0" font-family="'Microsoft YaHei UI','Microsoft YaHei','Segoe UI',sans-serif" font-size="10.5" font-weight="400" fill="#8A96A3" text-anchor="end">绿色 = 已完成并验证 ｜ 琥珀 = 已实现但语义不完整 ｜ 橙 / 蓝 / 灰 = 后续阶段</text>
+</svg>

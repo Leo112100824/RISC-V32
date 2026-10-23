@@ -1,6 +1,16 @@
 # Simulation waveform
 *.vcd
 *.wdb
+*.vvp
+*.wlf
+transcript
+model_tb/work/
+model_tb/modelsim_lib/
+model_tb/modelsim.ini
+model_tb/results/
+model_tb/*.log
+model_tb/unit/*.log
+__pycache__/
 
 # Vivado
 vivado/
