@@ -1,5 +1,7 @@
 # RTL 单模块测试环境
 
+完整运行步骤、测试数据修改方法和失败排查见[测试运行指南](../../doc/测试运行与故障排查.md)及[测试数据修改指南](../../doc/测试数据修改指南.md)。
+
 运行 `make unit`（可从工程根目录、`RISC-V32` 或 `model_tb` 目录执行）会编译一次，再依次运行 17 个活动 RTL 模块各自的 SystemVerilog testbench。每个 bench 直接实例化被测模块并自检。`scripts/run_regression.py` 同时检查退出码、Fatal/Error/FAIL 和独立的完成标记；失败或超时使回归非零退出。日志分别保存到 `model_tb/results/tb_<module>.log`，`summary.json` 记录逐项结论与检查数量。
 
 在 `model_tb` 中可运行 `make unit-alu`、`make unit-ex-stage`、`make unit-top-module` 单测。完整回归入口是 `make regression-check`，包括 17 个模块和原有 `tb_top`；`make test-runner` 检查错误退出、伪 PASS 和超时处理。

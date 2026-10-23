@@ -18,8 +18,6 @@
 | `pc_plus4.v` | `rtl/core/if_stage/pc_plus4.v` | 原 PC+4 |
 | `mux.v` | `rtl/core/if_stage/mux.v` | 原下一 PC 四选一 |
 | `mux_2_alu.v` | `rtl/core/ex_stage/mux_2_alu.v` | 原 ALU 操作数 mux |
-| `改进.md` | `rtl/core/改进.md` | 单周期阶段的检查记录 |
-
 新实现中：
 
 - `decode.v` 与 `control_unit.v` 合并为 `rtl/core/id_stage/decoder.v`。

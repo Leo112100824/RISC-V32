@@ -1,61 +1,47 @@
-# 定向测试程序
+# 整核定向测试程序
 
-本目录的测试程序覆盖 **RV32I 全部 41 条 + Zicsr 6 条 = 47 条指令**，并额外覆盖：
+gen_test.py 生成 RV32I/Zicsr 镜像和期望值，供 model_tb/tb_top.v 使用。具体示例见[测试数据修改指南](../../doc/测试数据修改指南.md)，运行与排错见[测试运行指南](../../doc/测试运行与故障排查.md)。
 
-- `MRET`（trap 返回，不属于 47 条基础列表但异常处理必需）
-- 8 类异常：ECALL、EBREAK、非法指令、load 非对齐、store 非对齐、指令地址非对齐、CSR 只读、CSR 未实现
+## 源文件与生成文件
 
-## 生成
+在仓库根目录执行 make program，然后 make sim。
 
-```powershell
-cd RISC-V32\model_tb
-make program        # 或 python program/gen_test.py
-make sim            # 编译 + 运行，tb_top 自动比对
-```
+| 文件 | 用途 | 是否手改 |
+|---|---|---|
+| gen_test.py | 汇编 DSL、测试输入、期望值的生成源 | 是 |
+| program.hex | 每行一个 32 位指令字 | 否 |
+| expected.hex | 按结果序号排列的 32 位期望值 | 否 |
+| trap_expected.hex | 按 trap 顺序排列的 cause | 否 |
+| defs.vh | 结果数、trap 数宏定义 | 否 |
+| checks.txt | 结果索引、测试名、期望值映射 | 否 |
 
-`gen_test.py` 是一个小型 RV32I/Zicsr 汇编 DSL，负责：
-
-1. 按标签解析分支/跳转/`la` 的偏移与地址；
-2. 生成 `program.hex`（指令存储器镜像）；
-3. 生成 `expected.hex`（89 个结果字）与 `trap_expected.hex`（8 个 mcause）；
-4. 生成 `defs.vh`（结果数/trap 数）和 `checks.txt`（索引到测试名）。
+基线为 380 个指令字、89 项结果、8 次 trap；新增测试后数量可以变化。
 
 ## 内存布局
 
-| 地址 | 用途 |
+imem 和 dmem 是独立数组，数值地址相同不表示共享存储。
+
+| 存储器/地址 | 用途 |
 |---|---|
-| `0x0000_0000 – 0x0000_00FF` | 结果数组（每个测试一个字，`sw` 写入） |
-| `0x0000_0400 – 0x0000_04FF` | load/store 测试数据区 |
-| `0x0000_0600 – 0x0000_06FF` | trap 日志（每条 trap：mcause、mepc、mtval，x27 递增） |
-| `0x0000_0080` | trap handler（mtvec） |
-| `0x0000_0100` | `_start` |
+| imem 0x0000 | 入口跳转 |
+| imem 0x0080 | trap handler |
+| imem 0x0100 | _start |
+| dmem 0x0000–0x0163 | 当前 89 个结果字，即 89×4=356 字节 |
+| dmem 0x0400–0x04FF | 约定的 load/store 数据区 |
+| dmem 0x0600–0x065F | 当前 8 条日志，每条 cause/mepc/mtval 共 12 字节 |
 
-## 覆盖映射
+TB 容量：imem 1024 字（4 KiB），dmem 512 字（2 KiB）。保持数据基址 0x400 时结果最多放 256 个字；生成器偏移检查不会自动保证区域互不重叠。增加 trap 还要修改 TB 固定索引的 mtval 分类断言，不能只增加 cause 数量。
 
-`checks.txt` 列出 89 个结果的索引与测试名，主要包括：
+## 覆盖
 
-| 类别 | 测试名 |
+| 类别 | 测试范围 |
 |---|---|
-| R 型 | ADD / SUB / SLL / SLT / SLTU / XOR / SRL / SRA / OR / AND |
-| I 型 | ADDI / SLTI / SLTIU / XORI / ORI / ANDI / SLLI / SRLI / SRAI |
-| Load | LB / LH / LW / LBU / LHU（含字节偏移） |
-| Store | SB / SH / SW |
-| 分支 | BEQ / BNE / BLT / BGE / BLTU / BGEU（taken/not-taken） |
-| 跳转 | JAL / JALR（链接值与目标） |
-| 高位立即数 | LUI / AUIPC |
-| 系统 | FENCE / FENCE.I / ECALL / EBREAK / MRET |
-| CSR | CSRRW / CSRRS / CSRRC / CSRRWI / CSRRSI / CSRRCI |
+| 运算 | R 型 10 条、I 型 9 条；负数/移位/有符号与无符号比较 |
+| 访存 | LB/LBU/LH/LHU/LW、SB/SH/SW，偏移和扩展 |
+| 控制 | 6 类条件分支 taken/not-taken、JAL/JALR、链接值前递 |
+| 高位立即数 | LUI、AUIPC |
+| 系统/CSR | FENCE、FENCE.I、6 类 CSR、纯读与只读保护、ECALL/EBREAK、MRET |
 
-trap 期望原因顺序：
+trap 顺序：11（ECALL）、3（EBREAK）、2（非法字 0）、4（load 非对齐）、6（store 非对齐）、0（目标非对齐）、2（写只读 CSR）、2（未实现 CSR）。结果序号见 checks.txt。
 
-```
-11 (ECALL), 3 (EBREAK), 2 (非法指令), 4 (load 非对齐),
-6 (store 非对齐), 0 (指令地址非对齐), 2 (CSR 只读), 2 (CSR 未实现)
-```
-
-## 说明
-
-- 测试程序假定 `mtvec` 为 direct 模式（低 2 位忽略）。
-- trap handler 固定执行 `mepc += 4` 后 `mret`，因此测试指令都是 4 字节指令。
-- `x27` 是 trap 日志指针，`x28..x30` 是 handler scratch，`x31` 是 trap 计数；测试主体只使用 `x1..x26`。
-- 若新增测试，修改 `gen_test.py` 后重新生成即可，TB 会按 `defs.vh` 自动调整比较数量。
+x1 为结果基址，x2 为访存数据基址；x27 为 trap 日志指针，x28–x30 为 handler 临时寄存器，x31 为 trap 计数。新增用例保持这些约定，并显式初始化所有读取的寄存器。handler 跳过一条 4 字节指令后返回，仅适用于这里的定向同步异常。

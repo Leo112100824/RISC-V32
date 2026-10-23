@@ -1,49 +1,30 @@
-```
-RISC-V/
-├── rtl/
-│   ├── core/          # 六级流水线（IF1/IF2/ID/EX/MEM/WB）+ CSR + 异常单元
-│   ├── mem/           # 访存、对齐处理、BRAM 封装
-│   └── soc/           # 总线、外设、顶层
-├── tb/
-│   ├── unit/          # 单元级 testbench（每个模块一个）
-│   ├── top/           # 顶层指令级 testbench
-│   └── uvm/           # UVM 验证环境（阶段五）
-├── sw/
-│   ├── tests/         # 裸机测试程序、crt0.S、链接脚本
-│   └── bench/         # CoreMark / Dhrystone
-├── fpga/              # XDC 约束文件、Vivado 工程、上板脚本
-├── scripts/           # 编译、回归、覆盖率收集、差分对比脚本
-├── docs/
-│   ├── spec/          # RISC-V ISA / 特权架构手册 PDF
-│   ├── xilinx/        # UG473、UG472、DS181/DS182 等器件手册
-│   ├── adr/           # ⭐ 架构决策记录（面试与答辩的主要依据）
-│   ├── diagrams/      # 数据通路框图、流水线时序图
-│   └── notes/         # 每周踩坑记录（简历素材，现在就攒）
-└── README.md
-```
+# RV32I + Zicsr 六级流水线处理器
 
-## 文档
+当前实现为 IF1 → IF2 → ID → EX → MEM → WB 六级流水线，支持 RV32I、Zicsr、MRET 和机器模式同步异常。官方兼容性回归、中断、M 扩展与 SoC/FPGA 集成仍待推进。
 
-- [架构总览](doc/architecture.md)：六级流水线、CSR/异常、存储器接口
-- [已完成功能与后续方向](doc/已完成功能与完善方向.md)：47 条指令状态、验证结果、技术债、阶段路线
-- [47 条指令框架图](doc/diagrams/riscv32_47instr_框架与完善方向.png)
-- [测试程序说明](model_tb/program/README.md)：生成方式、内存布局、覆盖映射
-- [历史 v2 框架图](doc/diagrams/archive/pipeline_v2_架构框架.png)
-- [历史单周期框架图](doc/diagrams/archive/single_cycle_架构框架.png)
+## 文档入口
 
-## 快速开始
+| 想做什么 | 阅读文档 |
+|---|---|
+| 了解工程和实际目录 | [工程总览与文档索引](doc/工程总览与文档索引.md) |
+| 跑测试、GUI，查看失败日志 | [测试运行与故障排查](doc/测试运行与故障排查.md) |
+| 修改输入、添加检查、重新生成 HEX | [测试数据修改指南](doc/测试数据修改指南.md) |
+| 理解流水线、CSR 与异常 | [架构总览](doc/architecture.md) |
+| 查看验证基线与下一步 | [工程状态与后续路线](doc/已完成功能与完善方向.md) |
+| 查看每个模块覆盖范围 | [单元测试清单](model_tb/unit/README.md) |
+| 查看整核程序布局与测试名 | [测试程序说明](model_tb/program/README.md) |
 
-```powershell
-cd model_tb
-make          # 默认：控制台回归，89 结果 + 8 trap
-make unit     # 17 个活动 RTL 模块的独立测试环境
-make regression-check # 模块 + 整核完整回归，严格检查失败状态
-make test-runner # 回归脚本错误处理/超时自检
-make doctor   # 检查 make / python / vlog / vsim 是否可见
-make program  # 重新生成测试程序（可选）
-make gui      # QuestaSim GUI + start.do 波形
-```
+## 快速运行
 
-也可以在 `RISC-V32` 或工程根目录直接执行 `make sim`、`make unit`，上层 Makefile 会自动转到 `model_tb`。模块测试清单见 [单元测试环境](model_tb/unit/README.md)。
+以下命令在克隆后的仓库目录（含本 README 的目录）执行。需要 Python 3.10+、GNU Make 和 QuestaSim 2024.1；其他仿真器版本尚未在本工程验证。
 
-回归由 `scripts/run_regression.py` 执行，日志与机器可读汇总写入 `model_tb/results/`（已忽略）。回归脚本需要 Python 标准库和 QuestaSim 的 `vlib`、`vlog`、`vsim`；仿真器路径需在 PATH 中，或通过 `--vlib/--vlog/--vsim` 指定。`make sim` 及 `make unit` 在仿真断言失败、缺少 PASS 标记或仿真器退出非零时都会返回失败。
+~~~powershell
+make regression-check  # 全部 17 个模块 + 原有整核程序
+make unit-alu          # 单测示例
+make program           # 修改生成器后重新生成测试数据
+make sim               # 验证生成的整核程序
+~~~
+
+没有 Make 时可直接调用 Python，详见运行指南。RTL 仿真使用 Python 生成的指令镜像，当前不需要 RISC-V GCC 或 Spike；它们用于后续官方软件测试和差分验证。
+
+日志位于 model_tb/results/，summary.json 保存最近一次运行的汇总。日志、波形和工作库不提交到 Git；测试生成器及其五个生成文件需要一起提交。
