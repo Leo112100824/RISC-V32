@@ -32,7 +32,7 @@ module if2_stage (
     input  wire        if1_data_valid,
 
     output reg  [31:0] if2_instr,
-    output reg  [31:0] if2_pc,
+    output reg  [31:0] if2_pc   ,
     output reg         if2_valid
 );
 

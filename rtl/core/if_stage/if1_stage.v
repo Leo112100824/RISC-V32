@@ -4,7 +4,6 @@
 //  if1_stage
 //
 //  流水线第 1 级：PC 寄存器 + 下一 PC 选择 + 取指地址产生。
-//
 //  目标存储器是同步读 BRAM：
 //    本拍给出 imem_addr，下一拍 imem_rdata 才有效。
 //  因此 IF1 只需要发地址，指令在 IF2 捕获。
@@ -16,8 +15,8 @@ module if1_stage (
     input  wire        clk,
     input  wire        rst_n,
 
-    // 来自 EX：分支/跳转重定向
-    input  wire        redirect,
+    // 来自 EX：分支/跳转重定向（新的指令地址）
+    input  wire        redirect,         
     input  wire [31:0] redirect_pc,
 
     // 来自 hazard_unit：load-use 停顿
@@ -40,7 +39,7 @@ module if1_stage (
 
     assign pc_plus4 = pc + 32'd4;
 
-    // 重定向优先于停顿；停顿保持 PC；否则顺序 +4
+    // 如果没有重定向，则判断是否停顿，否则顺序 +4
     assign next_pc = redirect ? redirect_pc :
                      stall    ? pc          :
                                 pc_plus4;

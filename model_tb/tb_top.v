@@ -116,8 +116,8 @@ module tb_top;
         for (i = 0; i < `TEST_NUM_TRAPS; i = i + 1)
             trap_expected[i] = 4'b0;
 
-        $readmemh("program/program.hex", imem);
-        $readmemh("program/expected.hex", expected);
+        $readmemh("program/program.hex"      , imem         );
+        $readmemh("program/expected.hex"     , expected     );
         $readmemh("program/trap_expected.hex", trap_expected);
 
         // Hold reset across two rising clock edges.

@@ -7,7 +7,7 @@
 //  并包含 EX/MEM 流水线寄存器。
 //
 //  在 EX 解析的控制流：
-//    - 条件分支 taken -> redirect
+//    - 条件分支 taken  -> redirect
 //    - JAL / JALR      -> redirect
 //    - FENCE.I         -> redirect 到 PC+4（指令流同步）
 //    - MRET            -> redirect 到 mepc
@@ -228,7 +228,7 @@ module ex_stage (
     // ------------------------------------------------------------------
     // Redirect target selection
     // ------------------------------------------------------------------
-    wire [31:0] redirect_pc_calc;
+    wire [31:0]     redirect_pc_calc;
 
     assign redirect_pc_calc = id_ex_mret    ? {mepc_i[31:2], 2'b00} :
                               id_ex_fence_i ? (id_ex_pc + 32'd4)    :
