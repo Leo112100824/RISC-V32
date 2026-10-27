@@ -2,8 +2,7 @@
 ../rtl/core/rv32_core.v
 ../rtl/core/hazard_unit.v
 ../rtl/core/csr_file.v
-../rtl/core/if_stage/if1_stage.v
-../rtl/core/if_stage/if2_stage.v
+../rtl/core/if_stage/if_stage.v
 ../rtl/core/id_stage/decoder.v
 ../rtl/core/id_stage/imm_gen.v
 ../rtl/core/id_stage/regfile.v

@@ -1,14 +1,13 @@
 `include "../riscv_def.vh"
 
 // ============================================================================
-//  rv32_core  ——  六级流水线小顶层（RV32I + Zicsr + Machine trap）
+//  rv32_core  ——  五级流水线小顶层（RV32I + Zicsr + Machine trap）
 //
-//      IF1  ->  IF2  ->  ID  ->  EX  ->  MEM  ->  WB
-//      PC/地址   取指队列  译码   执行   访存+CSR 写回
+//      IF  ->  ID  ->  EX  ->  MEM  ->  WB
+//      取指   译码   执行   访存   写回
 //
 //  每级模块自带输出流水线寄存器：
-//      if1_stage : PC
-//      if2_stage : IF2/ID 取指队列
+//      if_stage  : PC、同步指令返回对齐及 ID 停顿保持
 //      id_stage  : ID/EX
 //      ex_stage  : EX/MEM
 //      mem_stage : MEM/WB
@@ -25,33 +24,30 @@ module rv32_core (
     input  wire        rst_n,
 
     // Instruction memory (synchronous read)
-    output wire [31:0] imem_addr,
-    input  wire [31:0] imem_rdata,
+    output wire [31:0] imem_addr,   //指令地址
+    input  wire [31:0] imem_rdata,  //收到的指令数据
 
     // Data memory
-    output wire [31:0] mem_addr,
-    output wire [31:0] mem_wdata,
-    output wire [3:0]  mem_wmask,
-    output wire        mem_ren,
-    output wire        mem_wen,
-    input  wire [31:0] mem_rdata,
+    output wire [31:0] mem_addr,    //输出的数据地址
+    output wire [31:0] mem_wdata,   //写数据
+    output wire [3:0]  mem_wmask,   //输出的写数据掩码
+    output wire        mem_ren,     //读使能
+    output wire        mem_wen,     //写使能
+    input  wire [31:0] mem_rdata,   //读数据
 
     // Trap observability (testbench / debug)
-    output wire        trap,
-    output wire [3:0]  trap_cause,
-    output wire [31:0] trap_pc,
-    output wire [31:0] trap_tval
+    output wire        trap,        //异常信号
+    output wire [3:0]  trap_cause,  //异常原因
+    output wire [31:0] trap_pc,     //异常的pc
+    output wire [31:0] trap_tval    //异常附加信号
 );
 
     // ========================================================================
-    // IF1 <-> IF2
+    // IF -> ID
     // ========================================================================
-    wire [31:0] if1_pc_q;
-    wire        if1_data_valid;
-
-    wire [31:0] if2_instr;
-    wire [31:0] if2_pc;
-    wire        if2_valid;
+    wire [31:0] if_instr;
+    wire [31:0] if_pc;
+    wire        if_valid;
 
     // ========================================================================
     // ID <-> hazard
@@ -212,33 +208,19 @@ module rv32_core (
     assign trap_tval  = trap_tval_w;
 
     // ========================================================================
-    // IF1
+    // IF
     // ========================================================================
-    if1_stage u_if1_stage (
+    if_stage u_if_stage (
         .clk             (clk),
         .rst_n           (rst_n),
         .redirect        (pc_redirect),
         .redirect_pc     (pc_redirect_pc),
         .stall           (stall),
         .imem_addr       (imem_addr),
-        .if1_pc_q        (if1_pc_q),
-        .if1_data_valid  (if1_data_valid)
-    );
-
-    // ========================================================================
-    // IF2
-    // ========================================================================
-    if2_stage u_if2_stage (
-        .clk             (clk),
-        .rst_n           (rst_n),
-        .flush           (pc_redirect),
-        .stall           (stall),
         .imem_rdata      (imem_rdata),
-        .if1_pc_q        (if1_pc_q),
-        .if1_data_valid  (if1_data_valid),
-        .if2_instr       (if2_instr),
-        .if2_pc          (if2_pc),
-        .if2_valid       (if2_valid)
+        .if_instr        (if_instr),
+        .if_pc           (if_pc),
+        .if_valid        (if_valid)
     );
 
     // ========================================================================
@@ -267,9 +249,9 @@ module rv32_core (
         .rst_n               (rst_n),
         .stall               (stall),
         .flush               (pc_redirect),
-        .if2_instr           (if2_instr),
-        .if2_pc              (if2_pc),
-        .if2_valid           (if2_valid),
+        .if_instr            (if_instr),
+        .if_pc               (if_pc),
+        .if_valid            (if_valid),
         .wb_wen              (wb_wen),
         .wb_waddr            (wb_waddr),
         .wb_wdata            (wb_wdata),

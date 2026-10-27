@@ -7,7 +7,7 @@
 //    EX 级是 load，ID 级指令要读它的 rd -> 停顿 1 拍。
 //
 //  分支/跳转的重定向由 EX 直接产生，不需要本模块产生 flush；
-//  core 会把 ex_redirect 同时送给 IF1/IF2/ID。
+//  core 会把 redirect 同时送给 IF 与 ID/EX。
 //
 //  注意：
 //    - rd = x0 不产生冒险。
@@ -22,7 +22,7 @@ module hazard_unit (
     input  wire        id_ex_wb_en,
     input  wire [4:0]  id_ex_rd_addr,
 
-    // ID 级（IF2 寄存器）中的指令
+    // ID 级（IF/ID 边界）中的指令
     input  wire        id_valid,
     input  wire        id_illegal,
     input  wire        id_rs1_used,

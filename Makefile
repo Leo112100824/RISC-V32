@@ -33,7 +33,7 @@ help:
 	@echo "make sim      - 控制台回归：89 结果 + 8 trap"
 	@echo "make gui      - QuestaSim GUI"
 	@echo "make program  - 重新生成测试程序"
-	@echo "make unit     - 17 个活动 RTL 模块独立回归"
+	@echo "make unit     - 16 个活动 RTL 模块独立回归"
 	@echo "make regression-check - 模块 + 整核完整回归"
 	@echo "make test-runner - 回归脚本错误处理自检"
 	@echo "make clean    - 清理构建产物"

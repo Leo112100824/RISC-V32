@@ -27,7 +27,7 @@ help:
 	@echo "make sim      - 控制台回归：89 结果 + 8 trap（默认）"
 	@echo "make gui      - 打开 QuestaSim GUI 并加载 start.do 波形"
 	@echo "make program  - 重新生成 program.hex / expected.hex"
-	@echo "make unit     - 17 个活动 RTL 模块独立回归（失败非零退出）"
+	@echo "make unit     - 16 个活动 RTL 模块独立回归（失败非零退出）"
 	@echo "make regression-check - 模块 + 整核回归，日志在 results/"
 	@echo "make test-runner - 回归脚本负向/超时自检"
 	@echo "make unit-alu - 单独运行 ALU 测试"

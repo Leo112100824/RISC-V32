@@ -1,6 +1,6 @@
-# RV32I + Zicsr 六级流水线处理器
+# RV32I + Zicsr 五级流水线处理器
 
-当前实现为 IF1 → IF2 → ID → EX → MEM → WB 六级流水线，支持 RV32I、Zicsr、MRET 和机器模式同步异常。官方兼容性回归、中断、M 扩展与 SoC/FPGA 集成仍待推进。
+当前实现为 IF → ID → EX → MEM → WB 五级流水线，支持 RV32I、Zicsr、MRET 和机器模式同步异常。IF 保留与 FPGA BRAM 兼容的同步指令存储器接口。官方兼容性回归、中断、M 扩展与 SoC/FPGA 集成仍待推进。
 
 ## 文档入口
 
@@ -20,7 +20,7 @@
 以下命令在克隆后的仓库目录（含本 README 的目录）执行。需要 Python 3.10+、GNU Make 和 QuestaSim 2024.1；其他仿真器版本尚未在本工程验证。
 
 ~~~powershell
-make regression-check  # 全部 17 个模块 + 原有整核程序
+make regression-check  # 全部 16 个模块 + 原有整核程序
 make unit-alu          # 单测示例
 make program           # 修改生成器后重新生成测试数据
 make sim               # 验证生成的整核程序

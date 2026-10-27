@@ -18,7 +18,7 @@ ROOT = Path(__file__).resolve().parents[1]
 TB = ROOT / "model_tb"
 MODULES = (
     "alu", "branch_unit", "forward_unit", "imm_gen", "wb_stage",
-    "hazard_unit", "regfile", "if1_stage", "if2_stage", "csr_file",
+    "hazard_unit", "regfile", "if_stage", "csr_file",
     "lsu", "decoder", "id_stage", "ex_stage", "mem_stage", "rv32_core", "top",
 )
 BENCHES = {m: "tb_" + ("top_module" if m == "top" else m) for m in MODULES}

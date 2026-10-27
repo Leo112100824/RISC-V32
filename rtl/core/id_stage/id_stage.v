@@ -3,14 +3,14 @@
 // ============================================================================
 //  id_stage
 //
-//  流水线第 3 级：译码 + 读寄存器 + 生成控制/立即数，并在末尾包含
+//  流水线第 2 级：译码 + 读寄存器 + 生成控制/立即数，并在末尾包含
 //  ID/EX 流水线寄存器。
 //
 //  - decoder  : decode + control + imm 的合并版本
 //  - regfile  : 32x32，x0 恒 0，写优先旁路
 //  - ID/EX reg: 本模块内部，下一级 EX 只看到已寄存的信号
 //
-//  stall：向 EX 插入 bubble（valid=0），IF2 中的指令保持不变。
+//  stall：向 EX 插入 bubble（valid=0），IF 中的指令保持不变。
 //  flush：分支/跳转/异常重定向，清除 ID/EX。
 // ============================================================================
 module id_stage (
@@ -20,10 +20,10 @@ module id_stage (
     input  wire        stall,
     input  wire        flush,
 
-    // IF2 -> ID
-    input  wire [31:0] if2_instr,
-    input  wire [31:0] if2_pc,
-    input  wire        if2_valid,
+    // IF -> ID
+    input  wire [31:0] if_instr,
+    input  wire [31:0] if_pc,
+    input  wire        if_valid,
 
     // WB -> regfile 写口
     input  wire        wb_wen,
@@ -130,7 +130,7 @@ module id_stage (
     wire        dec_fence_i;
 
     decoder u_decoder (
-        .instr           (if2_instr),
+        .instr           (if_instr),
         .rs1_addr        (dec_rs1_addr),
         .rs2_addr        (dec_rs2_addr),
         .rd_addr         (dec_rd_addr),
@@ -193,9 +193,9 @@ module id_stage (
     assign id_rs1_used = dec_rs1_used;
     assign id_rs2_used = dec_rs2_used;
 
-    // 非法指令也要进入 EX 触发异常，因此 valid 只由 if2_valid 决定
-    assign id_valid   = if2_valid;
-    assign id_illegal = if2_valid && dec_illegal;
+    // 非法指令也要进入 EX 触发异常，因此 valid 只由 if_valid 决定
+    assign id_valid   = if_valid;
+    assign id_illegal = if_valid && dec_illegal;
 
     // ------------------------------------------------------------------
     // ID/EX pipeline register
@@ -275,9 +275,9 @@ module id_stage (
             id_ex_fence        <= 1'b0;
             id_ex_fence_i      <= 1'b0;
         end else begin
-            id_ex_valid        <= if2_valid;
-            id_ex_pc           <= if2_pc;
-            id_ex_instr        <= if2_instr;
+            id_ex_valid        <= if_valid;
+            id_ex_pc           <= if_pc;
+            id_ex_instr        <= if_instr;
             id_ex_rs1_data     <= rs1_data;
             id_ex_rs2_data     <= rs2_data;
             id_ex_rs1_addr     <= dec_rs1_addr;

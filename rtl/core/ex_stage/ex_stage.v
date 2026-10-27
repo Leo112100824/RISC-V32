@@ -26,8 +26,8 @@ module ex_stage (
     // ID/EX
     // ------------------------------------------------------------------
     input  wire        id_ex_valid,
-    input  wire [31:0] id_ex_pc,
-    input  wire [31:0] id_ex_instr,
+    input  wire [31:0] id_ex_pc,        //pc地址
+    input  wire [31:0] id_ex_instr,     //指令
     input  wire [31:0] id_ex_rs1_data,
     input  wire [31:0] id_ex_rs2_data,
     input  wire [4:0]  id_ex_rs1_addr,
@@ -87,7 +87,7 @@ module ex_stage (
     input  wire [31:0] mepc_i,
 
     // ------------------------------------------------------------------
-    // Redirect to IF1
+    // Redirect to IF
     // ------------------------------------------------------------------
     output wire        ex_redirect,
     output wire [31:0] ex_redirect_pc,

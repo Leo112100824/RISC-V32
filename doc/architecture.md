@@ -1,30 +1,29 @@
-# RV32I + Zicsr 六级流水线架构总览
+# RV32I + Zicsr 五级流水线架构总览
 
 > 工程入口见[工程总览与文档索引](工程总览与文档索引.md)；详细状态、技术债与路线见[工程状态与后续路线](已完成功能与完善方向.md)。
 
 ## 1. 流水线划分
 
 ```
-IF1  →  IF2  →  ID  →  EX  →  MEM  →  WB
-PC/地址  取指队列  译码   执行   访存+CSR 写回
+IF  →  ID  →  EX  →  MEM  →  WB
+取指   译码   执行   访存   写回
 ```
 
 | 级 | 模块 | 关键内容 |
 |---|---|---|
-| IF1 | `if1_stage` | PC、PC+4/trap/redirect 选择、`imem_valid[1:0]` 对齐同步 BRAM 延迟 |
-| IF2 | `if2_stage` | head/tail 取指队列、PC 去重、flush |
+| IF | `if_stage` | PC/redirect、同步 BRAM 返回对齐、ID 停顿时保持 IF/ID 指令 |
 | ID | `id_stage` | `decoder`（译码+控制+立即数+CSR/SYSTEM）、`regfile`、ID/EX 寄存器 |
 | EX | `ex_stage` | `forward_unit`、ALU、`branch_unit`、异常检测、MRET、EX/MEM 寄存器 |
 | MEM | `mem_stage` | LSU、CSR 读写、非对齐/CSR 异常、写回数据选择、MEM/WB 寄存器 |
 | WB | `wb_stage` | regfile 写口，`valid && wb_en && rd!=0` 门控 |
 
-**为什么取指拆两级**：目标 BRAM 是同步读，地址给出后下一拍数据才有效。IF1 发地址、IF2 捕获指令，因此跳转在 EX 解析时冲刷 IF1/IF2/ID 三级。
+指令存储器保持同步读：IF 发出地址，下一拍的指令数据与延迟 PC 直接构成 IF/ID 边界。ID stall 时 IF 暂存当前响应；重定向清除旧路径响应后从目标地址重新取指。
 
 ## 2. 关键控制
 
 - **前递**：EX/MEM → EX（ALU / PC+4 / IMM）、MEM/WB → EX；EX/MEM 优先。load 与 CSR 读不从 EX/MEM 前递。
-- **load-use / CSR-use**：EX 是 load 或 CSR 读且 ID 使用其 `rd` 时 `stall` 1 拍；IF1/IF2 冻结，ID/EX 插 bubble。
-- **控制冒险**：静态预测不跳转；`branch_taken/jal/jalr/mret/fence_i` 产生 redirect，刷新 IF2/ID。
+- **load-use / CSR-use**：EX 是 load 或 CSR 读且 ID 使用其 `rd` 时 `stall` 1 拍；IF 保持当前指令，ID/EX 插 bubble。
+- **控制冒险**：静态预测不跳转；`branch_taken/jal/jalr/mret/fence_i` 产生 redirect，清除 IF 返回和 ID/EX 中的年轻指令。
 - **写回旁路**：regfile 支持同拍写优先，覆盖“load 后隔两条指令”的读。
 
 ## 3. CSR 与异常
@@ -59,7 +58,8 @@ PC/地址  取指队列  译码   执行   访存+CSR 写回
 - 小顶层：`rtl/core/rv32_core.v`
 - CSR：`rtl/core/csr_file.v`
 - 译码：`rtl/core/id_stage/decoder.v`
-- 取指队列：`rtl/core/if_stage/if2_stage.v`
+- 取指：`rtl/core/if_stage/if_stage.v`
+- 架构图：[五级流水线总览](diagrams/riscv32_47instr_框架与完善方向.svg)
 - 冒险：`rtl/core/hazard_unit.v`、`rtl/core/ex_stage/forward_unit.v`
 - 验证：`model_tb/tb_top.v`、`model_tb/program/gen_test.py`
 
