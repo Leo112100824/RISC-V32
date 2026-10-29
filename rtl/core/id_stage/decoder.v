@@ -483,7 +483,7 @@ module decoder (
                 mem_write = 1'b1;
 
                 case (instr_id)
-                    `SB: mem_size = `MEM_BYTE;       
+                    `SB: mem_size = `MEM_BYTE;
                     `SH: mem_size = `MEM_HALF;
                     `SW: mem_size = `MEM_WORD;
                 endcase

@@ -2,9 +2,9 @@
 `include "../../riscv_def.vh"
 
 module imm_gen (
-    input              [  31:0]         instruction                ,
-    input              [   2:0]         instruction_type           ,
-    output             [  31:0]         immediate                   
+    input  [31:0] instruction     ,
+    input  [2:0]  instruction_type,
+    output [31:0] immediate
 );
     
 
